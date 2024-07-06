@@ -8,6 +8,7 @@ import NavigationBar from "./components/NavigationBar";
 import About from "./pages/About";
 import styled from "styled-components";
 import axios from "axios";
+import Cart from "./components/Cart";
 
 export let Context1 = createContext();
 
@@ -22,6 +23,7 @@ function App() {
       <NavigationBar></NavigationBar>
 
       <Routes>
+        <Route path="/cart" element={<Cart />} />
         <Route
           path="/detail/:id"
           element={

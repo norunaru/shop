@@ -3,12 +3,15 @@ import { useParams } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 
 import { Context1 } from "../App";
+import { addItem } from "../store";
+import { useDispatch } from "react-redux";
 
 const Detail = (props) => {
   let { stock, shoes } = useContext(Context1);
   const { id } = useParams();
   const [alert, setAlert] = useState(true);
   const [tab, setTab] = useState(0);
+  const dispatch = useDispatch();
   useEffect(() => {
     let a = setTimeout(() => {
       setAlert(false);
@@ -17,6 +20,7 @@ const Detail = (props) => {
       };
     }, 2000);
   }, []);
+
   return (
     <div className="container">
       {alert ? <div className="alert alert-warning">2sec</div> : null}
@@ -31,7 +35,14 @@ const Detail = (props) => {
           <h4 className="pt-5">{props.shoes[id].title}</h4>
           <p>{props.shoes[id].content}</p>
           <p>{props.shoes[id].price}</p>
-          <button className="btn btn-danger">주문하기</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              dispatch(addItem({ id: 0, name: "White and Black", count: 2 }));
+            }}
+          >
+            주문하기
+          </button>
         </div>
       </div>
 
