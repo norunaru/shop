@@ -12,6 +12,7 @@ const Detail = (props) => {
   const [alert, setAlert] = useState(true);
   const [tab, setTab] = useState(0);
   const dispatch = useDispatch();
+
   useEffect(() => {
     let a = setTimeout(() => {
       setAlert(false);
@@ -19,7 +20,13 @@ const Detail = (props) => {
         clearTimeout(a);
       };
     }, 2000);
-  }, []);
+
+    const watchedItems = JSON.parse(localStorage.getItem("watched")) || [];
+    if (!watchedItems.includes(id)) {
+      watchedItems.push(id);
+      localStorage.setItem("watched", JSON.stringify(watchedItems));
+    }
+  }, [id]);
 
   return (
     <div className="container">
@@ -27,14 +34,14 @@ const Detail = (props) => {
       <div className="row">
         <div className="col-md-6">
           <img
-            src="https://codingapple1.github.io/shop/shoes1.jpg"
+            src={`https://codingapple1.github.io/shop/shoes${id}.jpg`}
             width="100%"
           />
         </div>
         <div className="col-md-6">
-          <h4 className="pt-5">{props.shoes[id].title}</h4>
-          <p>{props.shoes[id].content}</p>
-          <p>{props.shoes[id].price}</p>
+          <h4 className="pt-5">{props.shoes[id - 1].title}</h4>
+          <p>{props.shoes[id - 1].content}</p>
+          <p>{props.shoes[id - 1].price}</p>
           <button
             className="btn btn-danger"
             onClick={() => {

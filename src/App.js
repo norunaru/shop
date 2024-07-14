@@ -1,8 +1,15 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import "./App.css";
 import data from "./data";
 import Card from "./components/Card";
-import { Link, Route, Routes, useNavigate, Outlet } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  useNavigate,
+  Outlet,
+  json,
+} from "react-router-dom";
 import Detail from "./pages/Detail";
 import NavigationBar from "./components/NavigationBar";
 import About from "./pages/About";
@@ -15,8 +22,16 @@ export let Context1 = createContext();
 function App() {
   let [shoes, setShoes] = useState(data);
   let [stock, setStock] = useState([10, 11, 12]);
+  let obj = { name: "kim" };
+  localStorage.setItem("data", JSON.stringify(obj));
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("watched") == undefined) {
+      localStorage.setItem("watched", JSON.stringify([]));
+    }
+  }, []);
 
   return (
     <div className="App">
@@ -42,10 +57,22 @@ function App() {
           element={
             <>
               <div className="main-bg"></div>
+              <div>
+                <h4>최근본상품</h4>
+                {JSON.parse(localStorage.getItem("watched")).map(
+                  (itemNo, i) => (
+                    <img
+                      key={i}
+                      src={`https://codingapple1.github.io/shop/shoes${itemNo}.jpg`}
+                      width={"50px"}
+                    />
+                  )
+                )}
+              </div>
               <div className="container">
                 <div className="row">
                   {shoes.map((shoe, i) => {
-                    return <Card shoes={shoe} i={i + 1}></Card>;
+                    return <Card key={i} shoes={shoe} i={i + 1}></Card>;
                   })}
                 </div>
               </div>
