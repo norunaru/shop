@@ -2,20 +2,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import "./App.css";
 import data from "./data";
 import Card from "./components/Card";
-import {
-  Link,
-  Route,
-  Routes,
-  useNavigate,
-  Outlet,
-  json,
-} from "react-router-dom";
+import { Link, Route, Routes, useNavigate, Outlet } from "react-router-dom";
 import Detail from "./pages/Detail";
 import NavigationBar from "./components/NavigationBar";
 import About from "./pages/About";
 import styled from "styled-components";
 import axios from "axios";
 import Cart from "./components/Cart";
+import { useQuery } from "react-query";
 
 export let Context1 = createContext();
 
@@ -24,6 +18,12 @@ function App() {
   let [stock, setStock] = useState([10, 11, 12]);
   let obj = { name: "kim" };
   localStorage.setItem("data", JSON.stringify(obj));
+
+  const result = useQuery("userdata", () =>
+    axios
+      .get("https://codingapple1.github.io/userdata.json")
+      .then((response) => response.data)
+  );
 
   const navigate = useNavigate();
 
@@ -57,6 +57,9 @@ function App() {
           element={
             <>
               <div className="main-bg"></div>
+              <div>
+                반가워요 {result.isLoading ? "로딩중" : result.data?.name}
+              </div>
               <div>
                 <h4>최근본상품</h4>
                 {JSON.parse(localStorage.getItem("watched")).map(
