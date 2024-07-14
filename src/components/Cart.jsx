@@ -1,8 +1,13 @@
-import React from "react";
+import React, { memo, useMemo, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { agePlus, changeName } from "../store/userSlice";
 import { addCount } from "../store";
+
+const Child = memo(() => {
+  console.log("rerendered");
+  return <div>자식</div>;
+});
 
 const Cart = () => {
   let userName = useSelector((state) => {
@@ -12,7 +17,8 @@ const Cart = () => {
   let cartItems = useSelector((state) => {
     return state.cartItems;
   });
-  console.log(cartItems);
+
+  let [count, setCount] = useState(0);
 
   let dispatch = useDispatch();
 
@@ -27,6 +33,8 @@ const Cart = () => {
       >
         버튼
       </button>
+      <Child count={count}></Child>
+      <button onClick={() => setCount(count + 1)}>+</button>
       <Table>
         <thead>
           <tr>
