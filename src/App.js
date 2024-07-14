@@ -3,8 +3,10 @@ import {
   lazy,
   Suspense,
   useContext,
+  useDeferredValue,
   useEffect,
   useState,
+  useTransition,
 } from "react";
 import "./App.css";
 import data from "./data";
@@ -23,15 +25,18 @@ const Detail = lazy(() => import("./pages/Detail"));
 function App() {
   let [shoes, setShoes] = useState(data);
   let [stock, setStock] = useState([10, 11, 12]);
+  const [name, setName] = useState("");
   let obj = { name: "kim" };
   localStorage.setItem("data", JSON.stringify(obj));
+  let [isPending, startTransition] = useTransition();
+  let state = useDeferredValue(name);
 
   const result = useQuery("userdata", () =>
     axios
       .get("https://codingapple1.github.io/userdata.json")
       .then((response) => response.data)
   );
-
+  let a = new Array(10000).fill(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +49,18 @@ function App() {
     <div className="App">
       <NavigationBar></NavigationBar>
       <Suspense fallback={<div>로딩중</div>}>
+        <input
+          onChange={(e) =>
+            startTransition(() => {
+              setName(e.target.value);
+            })
+          }
+        />
+        {isPending
+          ? "로딩중"
+          : a.map(() => {
+              return <div>{state}</div>;
+            })}
         <Routes>
           <Route path="/cart" element={<Cart />} />
           <Route
